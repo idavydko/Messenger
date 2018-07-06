@@ -1,0 +1,57 @@
+﻿@model Messenger.UI.Models.Admin.SendSmsModel
+
+<form asp-action="SendToAll" asp-controller="Admin" id="SmsForm" method="post" class="form-horizontal">
+    <div class="row">
+        <div class="col-sm-offset-1 col-md-10 col-sm-offset-1 framed-block">
+            <div class="form-group">
+                <span asp-validation-for="Message" class="text-danger"></span>
+                <textarea asp-for="Message" id="MessageAreaSMS" rows="4" class="form-control" placeholder="Type your message here"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-1 form-group commands-block">
+            <button type="button" class="btn btn-default" id="insertUrl" onclick="return false;"
+                    data-toggle="modal" data-target="#InsertUrlModal">
+                Insert Url
+            </button>
+            <button class="btn btn-default" onclick="copyContentToMessenger(); return false;">Copy content to Messenger editor</button>
+            <button class="btn btn-default" onclick="submitSmsForm(); return false;">Send to all users</button>
+        </div>
+    </div>
+</form>
+
+<!-- Modal -->
+<div class="messenger modal fade" id="InsertUrlModal" tabindex="-1" role="dialog" aria-labelledby="insertUrlModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="insertUrlModalLabel">Choose Image To Insert Url</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-3 framed-block img-container">
+                    <img src="~/images/storage/Boarding_pass.jpg" class="img-to-insert" />
+                </div>
+                <div class="col-md-3 framed-block img-container">
+                    <img src="~/images/storage/Coupon.png" class="img-to-insert" />
+                </div>
+                <div class="col-md-3 framed-block img-container">
+                    <img src="~/images/storage/QR_code.PNG" class="img-to-insert" />
+                </div>
+                <div class="col-md-3 framed-block img-container">
+                    <img src="~/images/storage/Receipt.jpg" class="img-to-insert" />
+                </div>
+                <div class="col-md-3 framed-block img-container">
+                    <img src="~/images/storage/Ticket.jpg" class="img-to-insert" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="insertUrls()">Insert Images</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

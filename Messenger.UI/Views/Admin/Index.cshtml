@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Messenger.UI.Models.Admin.User>
+@{
+    ViewData["Title"] = "Send Code";
+}
+
+<section class="row">
+    <div class="col-sm-offset-3 col-md-6 col-sm-offset-3 framed-block">
+        <p>Users given consent:</p>
+        <ol>
+            @foreach (var user in Model)
+            {
+                <li class="text-left">
+                    <span>@user.PhoneNumber,</span>
+                    @if (user.IsSmsUser)
+                    {
+                        <span>SMS Channel</span>
+                    }
+                    else if (user.IsFacebookUser)
+                    {
+                        <span>Messenger</span>
+                    }
+                    <button class="btn btn-default btn-sm delete-user-button" onclick="deleteUser(this)"
+                            data-user-id="@user.Id" data-is-sms-user="@user.IsSmsUser">
+                        Delete
+                    </button>
+                </li>
+            }
+        </ol>
+    </div>
+</section>
+
+<section class="row offset-md-top-20">
+    <div class="col-sm-offset-1 col-md-10 col-sm-offset-1 framed-block">
+        <ul class="nav nav-pills nav-fill mb-3 offset-md-top-15" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="SMS-tab" data-toggle="pill" href="#SMS" role="tab" aria-controls="SMS" aria-selected="true">SMS</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="Messenger-tab" data-toggle="pill" href="#Messenger" role="tab" aria-controls="Messenger" aria-selected="false">Messenger</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade in active" id="SMS" role="tabpanel" aria-labelledby="SMS-tab">
+                @await Html.PartialAsync("~/Views/Admin/SmsForm.cshtml", new Messenger.UI.Models.Admin.SendSmsModel())
+            </div>
+            <div class="tab-pane fade in" id="Messenger" role="tabpanel" aria-labelledby="Messenger-tab">
+                @await Html.PartialAsync("~/Views/Admin/FacebookForm.cshtml")
+            </div>
+        </div>
+    </div>
+</section>

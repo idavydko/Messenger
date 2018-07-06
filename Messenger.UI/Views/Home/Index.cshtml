@@ -1,0 +1,114 @@
+﻿@inject Microsoft.Extensions.Options.IOptions<Messenger.UI.Services.Facebook.FacebookConfig> FacebookConfig
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="row">
+    <div class="col-md-5 framed-block">
+        <h4>Consent Facebook Messenger</h4>
+
+        <div class="fb-messengermessageus"
+             messenger_app_id="@FacebookConfig.Value.AppId"
+             page_id="@FacebookConfig.Value.PageId"
+             color="blue"
+             size="xlarge">
+        </div>
+
+        @*<div class="fb-send-to-messenger"
+             messenger_app_id="@FacebookConfig.Value.AppId"
+             page_id="@FacebookConfig.Value.PageId"
+             color="blue"
+             size="xlarge">
+        </div>
+
+        <div class="fb-customerchat"
+                 page_id="@FacebookConfig.Value.PageId">
+            </div>
+
+        <div class="fb-messenger-checkbox"
+                 origin="https://toothsome-goat.glitch.me"
+                 page_id="@FacebookConfig.Value.PageId"
+                 messenger_app_id="@FacebookConfig.Value.AppId"
+                 prechecked="false"
+                 allow_login="true"
+                 size="xlarge"
+                 skin="light"
+                 center_align="true">
+            </div>*@
+
+        <script>
+            window.fbAsyncInit = function () {
+                FB.init({
+                    appId: '@FacebookConfig.Value.AppId', // App ID
+                    status: true, // check login status
+                    cookie: true, // enable cookies to allow the server to access the session
+                    xfbml: true,  // parse XFBML
+                    version: 'v2.6'
+                });
+
+                // Additional initialization code here
+                FB.Event.subscribe('auth.authResponseChange', function (response) {
+                    if (response.status === 'connected') {
+                        // the user is logged in and has authenticated your
+                        // app, and response.authResponse supplies
+                        // the user's ID, a valid access token, a signed
+                        // request, and the time the access token
+                        // and signed request each expire
+                        var uid = response.authResponse.userID;
+                        var accessToken = response.authResponse.accessToken;
+
+                        // TODO: Handle the access token
+                        // Do a post to the server to finish the logon
+                        // This is a form post since we don't want to use AJAX
+                        var form = document.createElement("form");
+                        form.setAttribute("method", 'post');
+                        form.setAttribute("action", '/Home/SendMessege');
+
+                        var field = document.createElement("input");
+                        field.setAttribute("type", "hidden");
+                        field.setAttribute("name", 'uid');
+                        field.setAttribute("name", 'accessToken');
+                        field.setAttribute("uid", uid);
+                        field.setAttribute("value", accessToken);
+                        form.appendChild(field);
+
+                        document.body.appendChild(form);
+
+                        //form.submit();
+
+                    } else if (response.status === 'not_authorized') {
+                        // the user is logged in to Facebook,
+                        // but has not authenticated your app
+                    } else {
+                        // the user isn't logged in to Facebook.
+                    }
+                });
+            };
+
+            // Load the SDK Asynchronously
+            (function (d) {
+                var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                if (d.getElementById(id)) { return; }
+                js = d.createElement('script'); js.id = id; js.async = true;
+                js.src = "//connect.facebook.net/en_US/all.js";
+                ref.parentNode.insertBefore(js, ref);
+            }(document));
+        </script>
+
+        <div id="fb-root"></div>
+        <script>
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0&appId=@FacebookConfig.Value.AppId';
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+    </div>
+    <div class="col-sm-offset-2 col-md-5 framed-block">
+        <section>
+            <h4>Consent SMS</h4>
+            @await Html.PartialAsync("~/Views/Sms/PhoneNumberForm.cshtml", new Messenger.UI.Models.Sms.SmsUser())
+        </section>
+    </div>
+</div>

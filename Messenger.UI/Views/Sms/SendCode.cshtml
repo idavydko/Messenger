@@ -1,0 +1,24 @@
+﻿@model Messenger.UI.Models.Sms.SendCodeModel
+@{
+    ViewData["Title"] = "Send Code";
+}
+
+<div class="cold-md-6 framed-block">
+    <form asp-action="SendCode" asp-controller="Sms" method="post" class="form-horizontal">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber"></label>
+            : <b>@Model.PhoneNumber</b>
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            <input type="hidden" asp-for="PhoneNumber" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Code"></label>
+            <input asp-for="Code" class="form-control-rect" />
+            <span asp-validation-for="Code" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">Send Code</button>
+        </div>
+    </form>
+</div>
